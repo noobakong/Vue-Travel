@@ -159,4 +159,4 @@ swiperOption: {
 ```
 这样，就能达到从一个组件穿刺到另一个组件的样式更改
 
-> 最后 使用v-for 对图标进行列表渲染循环，把数据保存到data的swiperList对象中
+> 最后 使用v-for 对图标进行列表渲染循环，把数据保存到data的swiperList对象中 test
