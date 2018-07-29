@@ -61,3 +61,102 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 相同的 我们的sytles文件夹多次使用 我们可以在webapck.config.js文件中定义
 `'styles': resolve('src/assets/styles'),`
 这样我们使用styles目录的时候就可以简化了
+
+##3 **多分支开发**
+> 在企业级的开发里，每一个新功能或新模块的开发都是在一个新的分支上进行
+> 开发完成后再合并到master主分支上
+
+### 3.1 在github上创建新分支
+
+    在github上创建仓库：
+    Create a new repository on the command line
+
+    touch README.md
+    git init
+    git add README.md
+    git commit -m "first commit"
+    git remote add <name> <url> 
+    git push -u origin master
+
+    在本地新建一个分支： git branch Branch1
+    切换到你的新分支: git checkout Branch1
+    将新分支发布在github上： git push origin Branch1
+    在本地删除一个分支： git branch -d Branch1
+    在github远程端删除一个分支： git push origin :Branch1   (分支名前的冒号代表删除)
+
+### 3.2 管理分支的一些语法
+1. 查看分支
+- 查看本地分支
+```
+$ git branch
+* master
+```
+- 查看远程分支
+`git branch -r`
+- 查看所有分支
+`git branch -a`
+
+2. 本地创建新的分支
+`git branch [branch name]`
+
+3. 切换到新的分支
+`git checkout [branch name]`
+
+4. 创建+切换分支
+`git checkout -b [branch name]`
+git checkout -b [branch name] 的效果相当于以下两步操作:
+`git branch [branch name] + git checkout [branch name]`
+
+5. 将新分支推送到github
+`git push origin [branch name]` orgin是你远程仓库的名字
+
+6. 删除本地分支
+`git branch -d [branch name]`
+
+7. 删除github远程分支
+`git push origin :[branch name]`  分支名前的冒号代表删除。 
+
+### 3.3 首页轮播图
+首页轮播图，采用vue-awesome-swiper插件
+> [vue-awesome-swiper github](https://github.com/surmon-china/vue-awesome-swiper)
+
+npm装包
+> `npm install vue-awesome-swiper@2.6.7 --save`
+
+使用方法和使用步骤参考官网
+
+在swiper-slide标签里填入img属性并引入src 加入类swiper-img 在style里定义width的宽度为100% 即可适应轮播
+
+> 此时的页面在网速不好的情况下会发生页面抖动 如何解决
+在轮播元素的最外层加一个class为wrapper的div 然后定义.wrapper的样式
+```stylus
+  .wrapper
+    overflow hidden
+    width 100%
+    height 0
+    padding-bottom: 26.67%
+    background #eee
+    .swiper-img
+      width 100%
+```
+这样就能把轮播图的位置保持撑起，就不会发生页面抖动了
+
+>此时，又有一个问题，我们需要导航点，怎么实现
+```
+swiperOption: {
+        pagination: '.swiper-pagination'
+      }
+```
+在swiperOption里添加pagination配置项就可以了
+
+> 此时的导航激活状态是蓝色的 怎么更改为白色？
+我们可以在页面查看小原点的类名为`swiper-pagination-bullet-active`，我们如果直接在样式中修改这个样式的background，是达不到更改效果的，为什么，因为此时的样式是当前组件的样式，而这个小圆点属于swiper组件的样式
+**这时，我们可以使用穿透样式来实现**
+在样式的最前面编写如下代码
+```
+.wrapper >>> .swiper-pagination-bullet-active
+    background: #eee
+```
+这样，就能达到从一个组件穿刺到另一个组件的样式更改
+
+> 最后 使用v-for 对图标进行列表渲染循环，把数据保存到data的swiperList对象中
