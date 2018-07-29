@@ -116,6 +116,14 @@ git checkout -b [branch name] 的效果相当于以下两步操作:
 7. 删除github远程分支
 `git push origin :[branch name]`  分支名前的冒号代表删除。 
 
+8. 合并分支
+```git
+git checkout master
+git merge <name>/<new-branch-name>
+git push
+```
+
+
 ### 3.3 首页轮播图
 首页轮播图，采用vue-awesome-swiper插件
 > [vue-awesome-swiper github](https://github.com/surmon-china/vue-awesome-swiper)
@@ -159,4 +167,15 @@ swiperOption: {
 ```
 这样，就能达到从一个组件穿刺到另一个组件的样式更改
 
-> 最后 使用v-for 对图标进行列表渲染循环，把数据保存到data的swiperList对象中 test
+> 最后 使用v-for 对图标进行列表渲染循环，把数据保存到data的swiperList对象中 
+
+### 4. 图标区域页面布局
+**4.1 初始化**
+- git创建分支
+- 新建icons.vue
+- Home.vue中引入组件
+
+**4.2 图标区域逻辑实现**
+> 当页面图标大于八个 可以左右拖动
+
+1. 在图标元素外加入swiper-slide标签和swiper标签
