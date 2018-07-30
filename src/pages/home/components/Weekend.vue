@@ -7,7 +7,7 @@
           <img class="item-img" :src="item.imgUrl" alt="">
         </div>
         <div class="item-info">
-          <p class="item-title">{{item.title}}}</p>
+          <p class="item-title">{{item.title}}</p>
           <p class="item-desc">{{item.desc}}</p>
         </div>
       </li>
@@ -23,18 +23,18 @@ export default {
       WeekendList: [{
       id: '0001',
       imgUrl: 'http://img1.qunarzz.com/sight/source/1505/aa/7baaf8a851d221.jpg_r_640x214_1431200f.jpg',
-      title: '远去的恐龙',
-      desc: '远去的恐龙远去的恐龙远去的恐龙远去的恐龙走去看看看'
+      title: '北京必游TOP10',
+      desc: '来北京必去的景点非这些地方莫属'
     }, {
       id: '0002',
       imgUrl: 'http://img1.qunarzz.com/sight/source/1505/aa/7baaf8a851d221.jpg_r_640x214_1431200f.jpg',
-      title: '远去的恐龙',
-      desc: '远去的恐龙远去的恐龙远去的恐龙远去的恐龙走去看看看~~~'
+      title: '北京必游TOP10',
+      desc: '来北京必去的景点非这些地方莫属~~~'
     }, {
       id: '0003',
       imgUrl: 'http://img1.qunarzz.com/sight/source/1505/aa/7baaf8a851d221.jpg_r_640x214_1431200f.jpg',
-      title: '远去的恐龙',
-      desc: '远去的恐龙远去的恐龙远去的恐龙远去的恐龙走去看看看~~~'
+      title: '北京必游TOP10',
+      desc: '来北京必去的景点非这些地方莫属~~~'
     }]
   }
     }
@@ -62,6 +62,6 @@ export default {
       ellipsis()
     .item-desc
       line-height .4rem
-      color #ccc
+      color #aaa
       ellipsis()
 </style>
