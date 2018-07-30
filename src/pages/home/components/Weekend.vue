@@ -2,7 +2,7 @@
   <div>
     <div class="title">周末去哪儿</div>
     <ul>
-      <li class="item border-bottom" v-for="item of WeekendList" :key="item.id">
+      <li class="item border-bottom" v-for="item of list" :key="item.id">
         <div class="item-img-wrapper">
           <img class="item-img" :src="item.imgUrl" alt="">
         </div>
@@ -18,26 +18,9 @@
 <script>
 export default {
   name: 'Weekend',
-  data () {
-    return {
-      WeekendList: [{
-      id: '0001',
-      imgUrl: 'http://img1.qunarzz.com/sight/source/1505/aa/7baaf8a851d221.jpg_r_640x214_1431200f.jpg',
-      title: '北京必游TOP10',
-      desc: '来北京必去的景点非这些地方莫属'
-    }, {
-      id: '0002',
-      imgUrl: 'http://img1.qunarzz.com/sight/source/1505/aa/7baaf8a851d221.jpg_r_640x214_1431200f.jpg',
-      title: '北京必游TOP10',
-      desc: '来北京必去的景点非这些地方莫属~~~'
-    }, {
-      id: '0003',
-      imgUrl: 'http://img1.qunarzz.com/sight/source/1505/aa/7baaf8a851d221.jpg_r_640x214_1431200f.jpg',
-      title: '北京必游TOP10',
-      desc: '来北京必去的景点非这些地方莫属~~~'
-    }]
+  props: {
+    list: Array
   }
-    }
 }
 </script>
 
@@ -51,7 +34,7 @@ export default {
   .item-img-wrapper
     overflow hidden
     height 0
-    padding-bottom 33.9%
+    padding-bottom 38%
   .item-img
     width 100%
   .item-info

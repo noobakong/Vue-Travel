@@ -189,4 +189,66 @@ swiperOption: {
 ### 2.4 首页推荐组件开发
 
 ### 2.5 周末游组件开发
-sss
+
+
+## 3 使用ajax传递数据
+### 3.1 准备工作
+> vue官方推荐使用axios来完成ajax数据的请求
+
+- 装包: `npm install axios --save`
+- home组件中引入axios
+- 结合vue的mouted生命周期钩子来完成请求
+
+如果每个子组件都发送一个ajax请求来获取数据的话，一个首页就要请求多个ajax请求，会使我们的程序效率下降，我们可以在home组件请求一个ajax请求，把数据传给子组件，这样就能提高效率
+
+> 怎么模拟后台的数据呢？
+
+**因为我们页面整直接访问static文件夹**,所以我们可以在static下创建一个mock文件夹，里面定影json文件来模拟后台数据
+
+但是我们并不想提交我们的数据到github，所以我们可以在gitnore文件中排除文件
+
+我们上线后的ajax请求地址都是基本都是相对路径'/api/下的json文件，但是此时我们的文件在static/mock文件夹中，我们可以把axios的请求地址改成我们本地的static/mock，但是这样做的话以后上线前要更改代码，这是不可取的
+> 即使用api文件目录，又能获取到static中的文件，怎么办？
+
+我们可以使用vue基于webpack-dev-serve的一个配置选项来解决这个问题，在vuecli生成的config文件夹中index.js文件有一个`proxyTable`配置选项
+我们可以这样来替换我们的请求地址：
+```JavaScript
+proxyTable: {
+      '/api': {
+        target: 'http://localhost:8080',
+        pathRewrite: {
+          '^/api': '/static/mock'
+        }
+      }
+    }
+```
+这样，就能完美解决我们的问题了
+
+> 注意，json格式的每一项的最后一项不要加带分号，这样可能会导致json数据解析失败
+
+### 3.2 首页父子组件数据传递
+由于home组件获取json数据后，应该向子组件传递数据，这就涉及到父组件向子组件传值的问题
+父组件通过属性向子组件传值，子组件props接受数据
+```JavaScript
+methods: {
+  getHomeInfo () {
+    axios.get('/api/index.json') // 返回的是一个promise对象，后面使用then
+      .then(this.getHomeInfoSucc) // 获取成功执行getHomeInfoSucc函数
+  },
+  getHomeInfoSucc (res) {
+    res = res.data
+    if (res.ret && res.data) {
+      const data = res.data
+      this.city = data.city
+      this.swiperList = data.swiperList
+      this.iconList = data.iconList
+      this.recommendList = data.recommendList
+      this.weekendList = data.weekendList
+    }
+    console.log(res)
+  }
+},
+mounted () {
+  this.getHomeInfo() // 页面挂载好执行这个方法ajax获取数据
+}
+```
