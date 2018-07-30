@@ -31,12 +31,17 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 - `fastClick.attach(document.body)`
 ### 1.5 注册阿里的iconfont并创建travel项目
 
-## 2. 首页header的开发
-### 2.1 项目中使用stylus来编写css样式
+## 2. 首页的开发
+
+### 2.1 准备工作&注意事项
+
+####  (1).项目中使用stylus来编写css样式
+
 `npm install stylus --save`  `npm install stylus-loader --save`
 - 要学习stylus语法
 - 学习flex布局 rem布局的用法
-### 2.2 iconfont的使用和代码的优化
+#### (2). iconfont的使用和代码的优化
+
 - 如何使用iconfont
 > 1. 进入iconfont官网，选择图标，加入购物车放入项目中
 > 2. 下载zip包并解压，把字体文件放入src/assets/styles/iconfont文件夹中
@@ -61,30 +66,28 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 相同的 我们的sytles文件夹多次使用 我们可以在webapck.config.js文件中定义
 `'styles': resolve('src/assets/styles'),`
 这样我们使用styles目录的时候就可以简化了
-
-##3 **多分支开发**
+#### (3). 在github上创建新分支
 > 在企业级的开发里，每一个新功能或新模块的开发都是在一个新的分支上进行
 > 开发完成后再合并到master主分支上
 
-### 3.1 在github上创建新分支
-
     在github上创建仓库：
     Create a new repository on the command line
-
+    
     touch README.md
     git init
     git add README.md
     git commit -m "first commit"
     git remote add <name> <url> 
     git push -u origin master
-
+    
     在本地新建一个分支： git branch Branch1
     切换到你的新分支: git checkout Branch1
     将新分支发布在github上： git push origin Branch1
     在本地删除一个分支： git branch -d Branch1
     在github远程端删除一个分支： git push origin :Branch1   (分支名前的冒号代表删除)
 
-### 3.2 管理分支的一些语法
+#### (4).管理分支的一些语法
+
 1. 查看分支
 - 查看本地分支
 ```
@@ -124,7 +127,9 @@ git push
 ```
 
 
-### 3.3 首页轮播图
+
+### 2.2 首页轮播
+
 首页轮播图，采用vue-awesome-swiper插件
 > [vue-awesome-swiper github](https://github.com/surmon-china/vue-awesome-swiper)
 
@@ -169,13 +174,18 @@ swiperOption: {
 
 > 最后 使用v-for 对图标进行列表渲染循环，把数据保存到data的swiperList对象中 
 
-### 4. 图标区域页面布局
-**4.1 初始化**
+### 2.3 图标区域页面布局
+
+**初始化**
 - git创建分支
 - 新建icons.vue
 - Home.vue中引入组件
 
-**4.2 图标区域逻辑实现**
+**图标区域逻辑实现**
 > 当页面图标大于八个 可以左右拖动
 
 1. 在图标元素外加入swiper-slide标签和swiper标签
+
+### 2.4 首页推荐组件开发
+
+### 2.5 周末游组件开发
