@@ -17,7 +17,12 @@
           </div>
         </div>
       </div>
-      <div class="area" v-for="(item, key) of cities" :key="key">
+      <div
+        class="area"
+        v-for="(item, key) of cities"
+        :key="key"
+        :ref="key"
+      >
         <div class="title border-topbottom">{{key}}</div>
         <div class="item-list">
           <div class="item border-bottom" v-for="innerItem of item" :key="innerItem.id">{{innerItem.name}}</div>
@@ -33,10 +38,22 @@ export default {
   name: 'CityList',
   props: {
     hot: Array,
-    cities: Object
+    cities: Object,
+    letter: String // 通过city传递过来的Alphabet中的字母
   },
   mounted () {
     this.scroll = new Bscroll(this.$refs.wrapper)
+  },
+  watch: {
+    letter () { // 监听letter改变
+      if (this.letter) {
+        const element = this.$refs[this.letter][0]
+        // refs-->通过为每个循环绑定ref ref的值对应的是每个key 也就是每个字母
+        // [0]-->取到的是一个数组，具体的元素dom节点为数组的第一项
+        this.scroll.scrollToElement(element)
+        // scroll插件的而一个方法帮我们调到制定元素
+      }
+    }
   }
 }
 </script>

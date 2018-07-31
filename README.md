@@ -305,3 +305,114 @@ mounted () {
 ### 3.6 ajax获取城市数据
 - 在city.vue中引入city.json
 - 父子间向子组件传递消息
+
+### 3.7 兄弟组件联动
+**Todo1. 点击右侧字母表 list也跳到对应的城市也部分**
+
+循环字母列表时为每一个字母绑定点击事件
+alphabet组件传递消息给父组件city，city在传递消息给list组件，实现Alphabet和list的兄弟传值
+
+- **Alphabet.vue**  
+`@click="handleLetterClick"`
+
+```javascript
+handleLetterClick (e) {
+      this.$emit('change', e.target.innerText)
+    },
+```
+- **City.vue**
+`@change="handleLetterChange"`
+
+```Javscript
+handleLetterChange (letter) {
+      this.letter = letter
+    }
+```
+
+`:letter="letter"` 传递给list.vue组件
+
+- **List.vue**
+props 接收 letter
+通过watch来监听letter的变化
+```JavaScript
+  watch: {
+    letter () { // 监听letter改变
+      if (this.letter) {
+        const element = this.$refs[this.letter][0]
+        // refs-->通过为每个循环绑定ref ref的值对应的是每个key 也就是每个字母
+        // [0]-->取到的是一个数组，具体的元素dom节点为数组的第一项
+        this.scroll.scrollToElement(element)
+        // scroll插件的而一个方法帮我们调到制定元素
+      }
+    }
+  }
+```
+
+**Todo2. 滑动右侧字母表，list跟着滑动到对应的位置**
+
+- **Alphabet.vue**
+绑定star move end 三个触摸方法
+```JavaScript
+  @touchstart="handleTouchStart"
+  @touchmove="handleTouchMove"
+  @touchEnd="handleTouchEnd"
+```
+把字母表从cities获取放到计算属性letters中
+```JavaScript
+computed: {
+    letters () {
+      const letters = []
+      for (let i in this.cities) {
+        letters.push(i)
+      }
+      return letters
+      // ['A','B','C'...]
+    }
+  },
+```
+将计算出的滑到哪个字母$emit传递给父元素
+```JavaScript
+handleTouchMove (e) {
+      if (this.touchStatus) {
+        const startY = this.$refs['A'][0].offsetTop // A元素距离顶部的高度
+        const touchY = e.touches[0].clientY - 79 // 手指距离header下边缘的的距离
+        const index = Math.floor((touchY - startY) / 22) // 滑动了第几个字母
+        if (index >= 0 && index < this.letters.length) {
+          this.$emit('change', this.letters[index])
+        }
+        // console.log(index)
+      }
+    },
+```
+
+- **City.vue**
+@change="handleLetterChange"接收来自Alphabet的letter
+`:letter="letter"` 传递给list
+同样的和1一样使用watch来监视
+
+**Todo3. 列表组件优化**
+1. `const startY = this.$refs['A'][0].offsetTop`
+startY的值是固定的，可以提取出来
+
+放在updated生命周期函数钩子中，因为刚开始加载citise是通过json获取的，刚开始获取不到的时候是空，之后有获取到了ajax的内容，页面更新，就会执行updated钩子函数
+
+2. 函数节流
+手指在屏幕上滑动的时候，函数执行的次数是非常高的，我们可以采用函数节流
+通过定义一个定时器，来大大提高我们代码性能
+```JavaScript
+    handleTouchMove (e) {
+      if (this.touchStatus) {
+        if (this.timer) {
+          clearTimeout(this.timer)
+        }
+        this.timer = setTimeout(() => {
+          const touchY = e.touches[0].clientY - 79 // 手指距离header下边缘的的距离
+          const index = Math.floor((touchY - this.startY) / 22) // 滑动了第几个字母
+          if (index >= 0 && index < this.letters.length) {
+            this.$emit('change', this.letters[index])
+          }
+          // console.log(index)
+        }, 10)
+      }
+    }
+```
