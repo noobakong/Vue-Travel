@@ -304,3 +304,4 @@ mounted () {
 
 ### 3.6 ajax获取城市数据
 - 在city.vue中引入city.json
+- 父子间向子组件传递消息
