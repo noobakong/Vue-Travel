@@ -416,3 +416,30 @@ startY的值是固定的，可以提取出来
       }
     }
 ```
+
+### 3.7 完善搜索框--逻辑
+
+- 在search.vue增加search-content类 用于展示搜索内容
+```JavaScript
+    <div class="search-content" ref="search" v-show="keyword">
+      <ul>
+        <li
+          class="search-item border-bottom"
+          v-for="item of list"
+          :key="item.id"
+        >
+          {{item.name}}
+        </li>
+        <li class="search-item border-bottom" v-show="hasNoData">
+          没有找到匹配数据
+        </li>
+      </ul>
+    </div>
+```
+> ref = search 用于在mounted挂载滚动插件 v-show="keyword" 没有输入内容不显示
+
+- 在watch中监听keyword的变化，使用循环遍历，通过筛选把符合的city追加到list数组
+
+- 使用v-for循环输出list
+
+- 中间使用了定时器来实现函数节流来提高性能
