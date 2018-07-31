@@ -259,3 +259,45 @@ mounted () {
 - 创建组件
 
 ### 3.2 header开发
+- 创建组件
+- city.vue导入
+
+### 3.3 搜索框
+- 创建组件
+- city.vue导入
+
+### 3.4 城市列表
+- 创建组件
+- city.vue导入
+
+> title聊表的边框不太明显，可以给其添加样式
+```css
+  .border-topbottom
+    &:before
+      border-color #ccc
+    &:after
+      border-color #ccc
+```
+> 因为我们将要使用一个滚动插件--Better-scroll来完成此页面，所以我们应该禁止页面的超出滚动
+```css
+.list
+  overflow hidden
+  position absolute
+  top 1.58rem
+  left 0
+  right 0
+  bottom 0
+```
+
+使用**Better-scroll**
+- 装包 npm install better-scroll --save
+- import Bscroll from 'better-scroll'
+- 在vue的mounted时挂载一个better-scroll实例
+
+> 因为这个组件需要最外城的wrapper dom元素 我们给最外层标签添加ref="wrapper"属性
+
+### 3.5 字母滑动选择器
+- 创建组件
+- city.vue导入
+
+使用flex布局使其居中
