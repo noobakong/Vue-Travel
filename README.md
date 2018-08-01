@@ -555,4 +555,48 @@ actions: {
 
 -------------
 **vuex高级**
-> 慢慢的 我们的store- index中的代码越来越多，我们可以把状态分开到不同的文件中管理
+1. 慢慢的 我们的store- index中的代码越来越多，我们可以把状态分开到不同的文件中管理
+
+2. 使用map辅助函数来进行优化
+
+### 4.3 使用keep-alive优化网页性能
+> 路由发生切换的时候 ajax都会被重新发送，为什么？
+
+因为我们的页面每一次渲染都会执行mounted钩子 而我们的ajax请求就是放在mounted中进行的
+
+> 怎么优化？
+
+将我们的router-view坑用keep-alive标签包裹起来
+```Html
+<template>
+  <div id="app">
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
+  </div>
+</template>
+```
+页面被keep-alive包裹起来，就会是页面的资源加载到内存当中，不需要重新渲染，也不需要从新执行钩子，来回返回页面也只会获取一次json 
+此时，我们的vue中多出来一个生命周期函数钩子：`activated`
+
+### 4.4 选择城市后返回页面 页面需要被修改
+> 我们之前写的代码是固定的，虽然选择的城市发生变化,但是我们的我们的home页面中的内容并没有变化，怎么办？
+
+我们home首页的内容是有index.json ajax来获取的 我们只需要在home组件获得ajax的时候 使用？传参的方式，使得每一个城市对应自己的json文件，就可以了
+ `axios.get('/api/index.json?city=' + this.city`
+
+> 但是此时的json文件被缓存到了内存当中，存的还是第一次的值，我们怎么改变缓存的数据呢
+
+由于此时的页面被keep-alive标签包裹，我们的ajax请求只会在第一次刷新的时候被获取，但是此时我们需要由城市列表选择的城市来同步我们首页的json文件以达到统一刷新的目的
+
+**此时我们可以使用activated生命周期钩子**
+因为在被包裹keep-alive标签之后，mounted钩子不会执行，但是activated钩子只要页面重新出现，就会执行，所以我们可以在activated钩子函数中 判断页面选择的城市和之前的城市是否为一个城市，如果不是一个城市，则重新发送ajax请求
+我们在data数据中新增一个 `lastcity` 数据 配合`activated`钩子使用
+```JavaScript
+activated () {
+  if (this.lastcity !== this.city) {
+    this.lastcity = this.city
+    this.getHomeInfo()
+  }
+}
+```
