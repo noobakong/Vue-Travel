@@ -443,3 +443,116 @@ startY的值是固定的，可以提取出来
 - 使用v-for循环输出list
 
 - 中间使用了定时器来实现函数节流来提高性能
+
+## 4.使用Vuex来实现数据共享
+### 4.1 实现city和home组件的数据联动
+> 我们想要城市页面和首页实现数据共享
+City.vue和Home.vue是没有一个父组件可供中转，那么想进行两者的通信，该怎么办呢？
+
+**Vuex**
+- npm install vuex --save
+- 在src目录下创建store文件夹并新建index.js文件
+```JavaScript
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({ // 向外暴露一个由Actions State Mutations 三个组成的系统对象
+  state: {
+    city: 'aaa'
+  },
+  // actions: {
+  //   changeCity (ctx, city) { // 借助这个ctx上下文来使用commit方法来调用Mutations完成数据的更改
+  //     console.log(city)
+  //     console.log(ctx)
+  //     ctx.commit('MchangeCity', city)
+  //   }
+  // },
+  mutations: {
+    MchangeCity (state, city) {
+      state.city = city
+    }
+  }
+})
+
+```
+- 在main.js中引入
+`import store from './store' // vuex` 这样我们全局都能访问到store了
+并在vue实例中申明store,这样，我们以后就能使用vuex的数据了
+{{this.$store.state.city}}
+
+**具体使用**
+1. 把要公用的数据（例如city）定义到store/index.js的state中，在页面中把有city的地方换成 `{{this.$store.state.city}}`
+2. 我们为循环的每一个城市按钮绑定一个方法 `@click="handleCityClick(item.name)`
+并在methods中定义方法:
+```JavaScript
+  methods: {
+    handleCityClick (city) {
+      this.$store.commit('MchangeCity', city) // 想要通过actions调用方法必须使用dispatch 或者 跳过actions直接通过commit来调用Mutations
+      this.$router.push('/') // 选择后跳转到主页 实现联动 用了vue-router的编程跳转链接
+    }
+  }
+```
+3. 在store中定义Actions函数和Mutations函数 来实现数据的修改
+
+**总结:**
+> 想要通过vuex来管理公用数据,想要更改数据 要经过一下步骤
+1. 组件 ---dispatch---> Actions
+```JavaScript
+  methods: {
+    handleCityClick (city) {
+      this.$store.dispatch('changeCity', city) // 想要通过actions调用方法必须使用dispatch
+  }
+```
+2. Actions ---commit---> Mutations
+```JavaScript
+actions: {
+    changeCity (ctx, city) { // 借助这个ctx上下文来使用commit方法来调用Mutations完成数据的更改
+      ctx.commit('MchangeCity', city)
+    }
+  },
+```
+3. Mutations ------> State 
+```JavaScript
+  mutations: {
+    MchangeCity (state, city) {
+      state.city = city
+    }
+  }
+```
+
+> 在不复杂的环境下，有的时候我们更爱数据并不一定需要经过Actions，组件可以直接通过commit来使Mutations改变State
+
+1. 组件 ---commit---> Mutations
+```JavaScript
+  methods: {
+    handleCityClick (city) {
+      this.$store.commit('MchangeCity', city) // 想要通过actions调用方法必须使用dispatch
+  }
+```
+2. Mutations ------> State 
+```JavaScript
+  mutations: {
+    MchangeCity (state, city) {
+      state.city = city
+    }
+  }
+```
+
+### 4.2 vuex的高级使用和localStorage
+> 上述我们已经完成了vuex 实现两个不先练的组件的数据共享，但是我们一旦刷新我们的页面，我们的页面数据还是默认的我们在store中定义的数据，如何让程序记录我们的操作
+
+**使用localStorage来完成**
+在Mutations定义的方法里 加入：
+` localStorage.city = city` 来记录我们选择的城市
+在state中
+`city: localStorage.city || '南阳'` 
+这样 浏览器就能记忆我们选择的城市了 
+
+> 但是此时存在一个问题，浏览器如果使用了隐身模式或者关闭了浏览器存储，我们的程序就会直接报错无法执行
+我们可以使用try catch来优化一下我们的代码
+
+-------------
+**vuex高级**
+> 慢慢的 我们的store- index中的代码越来越多，我们可以把状态分开到不同的文件中管理
