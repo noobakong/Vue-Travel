@@ -621,3 +621,30 @@ activated () {
 点击跳转dom节点，会使得我们的css属性计算出错，从而造成错误，swiper为我们提供了一组配置，我们在配置项里添加 `observeParents: true` 和 `observer: true` 
 observeParents: 将observe应用于Swiper的父元素。当Swiper的父元素变化时，例如window.resize，Swiper更新。
 observer: 启动动态检查器(OB/观众/观看者)，当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
+
+### 5.3 渐隐逐显的header
+
+- 页面有两个头部，一个是刚进去的的定位为abs的返回按钮，另外一个是定位是fixed头部导航
+- 刚开始我们使用v-show = showAbs 和 v-show = ！showAbs 来分别控制两个头部，使其只显示一个
+
+- 使用 `window.addEventListener('scroll', this.handleScroll)` 来监听滚动的距离以切换哪个头部的展示 这个方法放在`activated`钩子里
+
+- handleScroll方法使用 document.documentElement.scrollTop 监听滚动离顶部的距离
+
+> 展示效果做好，剩下渐隐渐显的效果
+
+在 fixed 的头部标签绑定样式对象 ` :style="opacityStyle"` 
+```JavaScript
+handleScroll () {
+      const top = document.documentElement.scrollTop
+      if (top > 60) { // 过渡阶段
+        let opacity = top / 140 // 过渡效果
+        opacity = opacity > 1 ? 1 : opacity
+        this.opacityStyle = { opacity }
+        this.showAbs = false
+      } else {
+        this.showAbs = true
+      }
+    }
+  }
+```
