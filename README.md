@@ -600,3 +600,19 @@ activated () {
   }
 }
 ```
+
+##　5.详情页面的制作
+创建detail.vue Banner.vue 导入detail路由
+### 5.1 banner的制作
+
+- 字体图标更新后 记得替换字体文件和iconfont.css的一段 base64的代码、
+
+- 使用 `background-image linear-gradient` 达到渐变效果
+
+### 5.2 banner画廊组件
+
+> 这个画廊组件不仅仅这个组件中要使用，以后可能在别的地方也会使用
+
+所以我们新建 src/common/gallary/Gallary.vue 编写画廊组件为以后复用
+
+- 使用swiper插件实现图片轮播滚动
