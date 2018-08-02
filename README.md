@@ -691,3 +691,48 @@ scrollBehavior: function (to, from, savedPosition) {
 2. 对某个页面取消缓存的时候
 3. vue tools中组件的显示名字
 
+
+## 6 Vue项目上线前准备
+
+### 6.1 Vue项目的接口联调
+> 我们之前都是自己模拟后端的数据，实际项目中，我们是要和后端的数据，实现项目联调，如何进行？
+
+把mock中的数据替换成真正的后端服务器数据
+
+把config index.js 中的api制定的路径改为后端服务器的地址 一般都是本地80端口，一般是一下的形式
+```JavaScript
+proxyTable: {
+  '/api': {
+    target: 'http://localhost:80' 
+  }
+}
+```
+
+### 6.2 Vue项目的真机测试
+
+我们的项目是 通过 Webpack dev server 来进行的 它默认不支持ip地址的访问方式，要把它的默认配置项修改
+
+在package.json下 修改dev配置项 `webpack-dev-server --host 0,0,0,0`
+这样，就可以直接通过手机用ip地址来访问我们的项目
+
+> 在真机上，我们拖动字母表，会发现整个页面都跟着滚动，出现了bug，怎么半？
+
+`@touchstart.prevent="handleTouchStart"` 组织拖动的默认行为
+
+> 在低版本的安卓浏览器，可能出现白屏现象，怎么办？
+
+出现白屏现象的原因大部分是因为手机浏览器不支持promise特性，我们在项目中安装一个第三方的包
+- `npm install babel-polyfill --save`
+- 在main.js引入包 `import 'babel-polyfill'`
+
+### 6.3 Vue项目的打包上线
+1. 运行命令 npm run build  生成一个能被浏览器运行的代码，打包完成后，项目目录中多出来一个dist文件夹，里面就是是上线代码
+2. dist文件夹里的文件放到服务器跟目录中，就能上线了
+3. 如果想把上线文件放到根目录以外的地方，我们可以更改我们的config/index.js --> build--> assetsPublicPath路径
+
+## End To Do
+### vue基础官方文档熟连掌握
+### VueRouter 细节
+### Vuex 细节
+### Vue 服务器端渲染 （难）
+###　Webpack Bable Es6
