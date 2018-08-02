@@ -616,3 +616,8 @@ activated () {
 所以我们新建 src/common/gallary/Gallary.vue 编写画廊组件为以后复用
 
 - 使用swiper插件实现图片轮播滚动
+
+- 当我们点击banner的时候调到画廊页面，会发现渲染有问题，怎么办？
+点击跳转dom节点，会使得我们的css属性计算出错，从而造成错误，swiper为我们提供了一组配置，我们在配置项里添加 `observeParents: true` 和 `observer: true` 
+observeParents: 将observe应用于Swiper的父元素。当Swiper的父元素变化时，例如window.resize，Swiper更新。
+observer: 启动动态检查器(OB/观众/观看者)，当改变swiper的样式（例如隐藏/显示）或者修改swiper的子元素时，自动初始化swiper。
