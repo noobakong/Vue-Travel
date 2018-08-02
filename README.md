@@ -601,7 +601,7 @@ activated () {
 }
 ```
 
-##　5.详情页面的制作
+## 5.详情页面的制作
 创建detail.vue Banner.vue 导入detail路由
 ### 5.1 banner的制作
 
@@ -646,5 +646,18 @@ handleScroll () {
         this.showAbs = true
       }
     }
+  }
+```
+
+### 5.4 事件绑定的相关问题
+我们在5.3中，使用 `window.addEventListener('scroll', this.handleScroll)` 来监听滚动的距离，但是这个监听方法被绑定在了全局window中，所以我们的其他页面滚动时也会执行这段代码
+> 那么 我们怎么样才能使其只绑定在详情页呢？
+当我们使用keep-alive标签的时候，activated钩子函数产生的同时，也产生了一个deactivated的函数钩子，在activated绑定，在deactivated解绑即可
+```JavaScript
+  activated () {
+   window.addEventListener('scroll', this.handleScroll) // 页面展示绑定
+  },
+  deactivated() {
+    window.removeEventListener('scroll', this.handleScroll)
   }
 ```

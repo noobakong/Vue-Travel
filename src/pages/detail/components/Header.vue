@@ -46,8 +46,11 @@ export default {
     }
   },
   activated () {
-   window.addEventListener('scroll', this.handleScroll)
-  }
+   window.addEventListener('scroll', this.handleScroll) // 页面展示绑定
+  },
+  deactivated() {
+    window.removeEventListener('scroll', this.handleScroll)
+  },
 }
 </script>
 
