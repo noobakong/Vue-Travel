@@ -18,5 +18,8 @@ export default new Router({
       path: '/detail/:id', // 冒号传参
       name: 'Detail',
       component: Detail
-    }]
+    }],
+    scrollBehavior: function (to, from, savedPosition) {
+      return savedPosition || { x: 0, y: 0 }
+    }
 })

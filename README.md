@@ -589,6 +589,8 @@ actions: {
 
 由于此时的页面被keep-alive标签包裹，我们的ajax请求只会在第一次刷新的时候被获取，但是此时我们需要由城市列表选择的城市来同步我们首页的json文件以达到统一刷新的目的
 
+> keep-detail 可以加入exclude="不被缓存的组件名字" 这样就可以指定排除某个组件不被缓存
+
 **此时我们可以使用activated生命周期钩子**
 因为在被包裹keep-alive标签之后，mounted钩子不会执行，但是activated钩子只要页面重新出现，就会执行，所以我们可以在activated钩子函数中 判断页面选择的城市和之前的城市是否为一个城市，如果不是一个城市，则重新发送ajax请求
 我们在data数据中新增一个 `lastcity` 数据 配合`activated`钩子使用
@@ -661,3 +663,31 @@ handleScroll () {
     window.removeEventListener('scroll', this.handleScroll)
   }
 ```
+
+### 5.5 递归列表组件
+> 组件自生调用自己
+
+
+### 5.6 ajax数据替换
+
+> 我们发现，首页滑动到底部，在点击详情页面，详情页面初始状态也是在底部，怎么办？
+
+页面滑动 各个组件会相互影响，我们可以在路由的配置选项中添加如下配置：
+```
+scrollBehavior: function (to, from, savedPosition) {
+  return savedPosition || { x: 0, y: 0 }
+}
+```
+[router进阶](https://cn.vuejs.org/v2/guide/migration-vue-router.html#saveScrollPosition-替换)
+
+
+
+
+
+> 每个组件的export defalut的name是干什么用的？
+
+我们目前接触到的：
+1. 递归组件中可以用到它
+2. 对某个页面取消缓存的时候
+3. vue tools中组件的显示名字
+
